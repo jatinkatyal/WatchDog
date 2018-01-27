@@ -50,8 +50,8 @@ def calNeighbour(img,i,j,k):
 			return 0
 		else:
 			return 1
-
-img = cv2.imread('test.jpg')
+path = input('file: ')
+img = cv2.imread(path)
 img = cv2.resize(img,(480,320))
 img = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
 lbp = numpy.zeros(img.shape)
@@ -63,9 +63,6 @@ for i in range(img.shape[0]):
 		byte=0
 		for k in range(8):
 			byte = byte + calNeighbour(img,i,j,k)*2**k
-		if byte>255:
-			print('screwed')
-			break
 		lbp[i,j]=byte
 cv2.imwrite('lbp.jpg',lbp)
 cv2.imshow('lbp',lbp)
