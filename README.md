@@ -9,5 +9,7 @@
 <h2>Module <em>Detector & pre-processor</em></h2>
 <p>Detects face, converts to grayscale performs rescaling & normalization over color space.
 Haar cascade from intel's OCVL is used.</p>
+<h2>Module <em>Extractor</em></h2>
+<p>Linear Binary Pattern extractor.</p>
 <h2>Module <em>Mesh</em></h2>
 <p>Network to communicate between 'Eyes' and 'Sage'</p>
