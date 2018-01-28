@@ -1,12 +1,13 @@
 import cv2
-import preprocesses as PP
-class detector:
+from . import preprocesses as PP
+class Detector:
 	"""Detects face using OpenCV & Haars."""
 	def __init__(self):
 		self.detector = cv2.CascadeClassifier("haarcascade_frontalface_default.xml")
 
 	def detect(self,frame):
-		faceCoords = self.detector.detectMultiScale(PP.detectorPP(frame),scaleFactor=1.1,minNeighbors=5)
+		img = PP.detectorPP(frame)
+		faceCoords = self.detector.detectMultiScale(img,scaleFactor=1.1,minNeighbors=5)
 		faces =[]
 		for x,y,w,h in faceCoords:
 			faces.append(frame[y:y+h,x:x+w])
