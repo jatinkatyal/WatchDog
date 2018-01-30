@@ -3,7 +3,8 @@ from . import preprocesses as PP
 class Detector:
 	"""Detects face using OpenCV & Haars."""
 	def __init__(self):
-		self.detector = cv2.CascadeClassifier('/home/jatin/Work/WatchDog/DnPP/haarcascade_frontalface_default.xml')
+		d = os.path.dirname(os.path.realpath(__file__))
+		self.detector = cv2.CascadeClassifier(d+'/haarcascade_frontalface_default.xml')
 
 	def detect(self,frame):
 		img = PP.detectorPP(frame)
