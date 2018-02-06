@@ -6,13 +6,14 @@ features are stored in features.csv and respective classes
 are in classes.csv.
 '''
 
-I = 1 #This is the class of training examples in faceImages directory.
+I = 4 #This is the class of training examples in faceImages directory.
 
 import cv2,time,numpy,os
 from Eye.eye import Eye
 from DnPP.detector import Detector
 #import Extractor.extractor_lbp as ext
-import Extractor.extractorHIPMSDWD as ext
+#import Extractor.extractorHIPMSDWD as ext
+import Extractor.extractorMeanWindowsAtHIP as ext
 from DnPP import preprocesses as PP
 
 cam1 = Eye()
@@ -46,11 +47,6 @@ for p in features:
 	numpy.savetxt(f2,y,delimiter=',')
 	f1.close()
 	f2.close()
-image = faces.pop(0)
-for face in faces:
-	image = numpy.hstack([image,face])
-print(len(faces))
-cv2.imwrite(str(I)+'.jpg',image)
 print('done')
 time.sleep(5)
 cv2.destroyAllWindows()
