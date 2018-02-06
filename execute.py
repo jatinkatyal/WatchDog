@@ -6,7 +6,7 @@ features are stored in features.csv and respective classes
 are in classes.csv.
 '''
 
-I = 0 #This is the class of training examples in faceImages directory.
+I = 4 #This is the class of training examples in faceImages directory.
 
 import cv2,time,numpy,os
 from Eye.eye import Eye
@@ -14,15 +14,16 @@ from DnPP.detector import Detector
 #import Extractor.extractor_lbp as ext
 #import Extractor.extractorHIPMSDWD as ext
 #import Extractor.extractorMeanWindowsAtHIP as ext
-import Extractor.extractorMLBPWHIP as ext
+#import Extractor.extractorMLBPWHIP as ext
+import Extractor.extractorLBPWHIP as ext
 from DnPP import preprocesses as PP
 
 cam1 = Eye()
 det = Detector()
 faces = []
-for image in os.listdir('faceImages'):
+for image in os.listdir('faceImages/'+str(I)):
 	#capture image
-	frame = cam1.see('faceImages/'+image)
+	frame = cam1.see('faceImages/'+str(I)+'/'+image)
 	cv2.imshow('cam1',frame)
 	cv2.waitKey(50)
 
@@ -49,5 +50,4 @@ for p in features:
 	f1.close()
 	f2.close()
 print('done')
-time.sleep(5)
 cv2.destroyAllWindows()
