@@ -6,14 +6,15 @@ features are stored in features.csv and respective classes
 are in classes.csv.
 '''
 
-I = 4 #This is the class of training examples in faceImages directory.
+I = 0 #This is the class of training examples in faceImages directory.
 
 import cv2,time,numpy,os
 from Eye.eye import Eye
 from DnPP.detector import Detector
 #import Extractor.extractor_lbp as ext
 #import Extractor.extractorHIPMSDWD as ext
-import Extractor.extractorMeanWindowsAtHIP as ext
+#import Extractor.extractorMeanWindowsAtHIP as ext
+import Extractor.extractorMLBPWHIP as ext
 from DnPP import preprocesses as PP
 
 cam1 = Eye()
