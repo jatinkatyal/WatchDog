@@ -5,7 +5,7 @@ def toGray(frame):
 	return cv2.cvtColor(frame,cv2.COLOR_BGR2GRAY)
 
 def rescale(frame):
-	return cv2.resize(frame,(256,144))
+	return cv2.resize(frame,(150,150))
 
 def equalize(frame):
 	return cv2.equalizeHist(frame)

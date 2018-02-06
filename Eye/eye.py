@@ -2,14 +2,13 @@ import cv2
 
 class Eye:
 	"""Eyes sees everything, captures form camera by default if scene is not provided."""
-	def __init__(self,path=None):
-		self.path = path
+	def __init__(self):
 		self.cam = cv2.VideoCapture(0)
 
-	def see(self):
-		if self.path:
+	def see(self,path=None):
+		if path:
 			try:
-				frame = cv2.imread(self.path)
+				frame = cv2.imread(path)
 			except:
 				print('Error reading file through eye.')
 		else:
