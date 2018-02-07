@@ -17,10 +17,10 @@ def extractor(image,winSize):
 	z = numpy.transpose(z)
 	p = [[dst[y,x],x,y] for x,y in z if x>1 and x<148 and y>1 and y<148]
 	p.sort()
-	z = [[x,y] for d,x,y in p[:50]]
+	z = [[x,y] for d,x,y in p[:10]]
 
 	#Finding features at HIPs
-	feature = []
+	vector=[]
 	w = int(winSize/2)
 	for x,y in z:	
 		patch=image[y-w:y+w+1,x-w:x+w+1]
@@ -28,7 +28,6 @@ def extractor(image,winSize):
 		matB=patch[:w+1,w:].copy()
 		matC=patch[w:,:w+1].copy()
 		matD=patch[w:,w:].copy()
-		vector=[]
 		for j in [matA,matB,matC,matD]:
 			p = int(j.shape[0]/2)
 			q = int(j.shape[1]/2)
@@ -36,8 +35,7 @@ def extractor(image,winSize):
 			for k in range(8):
 				byte = byte + calNeighbour(j,p,q,k)*2**k
 			vector.append(byte/255)
-		feature.append(vector)
-	return numpy.array(feature)
+	return numpy.array(vector)
 
 def calNeighbour(img,i,j,k):
 	if i==0 and k<3:
@@ -93,7 +91,8 @@ def calNeighbour(img,i,j,k):
 if __name__ == '__main__':
 	img = cv2.imread('test.jpg')
 	img = cv2.cvtColor(img,cv2.COLOR_RGB2GRAY)
-	print(extractor(img,5))
+	feature = extractor(img,5)
+	print(len(feature),feature)
 	import time
 	time.sleep(3)
 	cv2.destroyAllWindows()

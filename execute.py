@@ -21,33 +21,31 @@ from DnPP import preprocesses as PP
 cam1 = Eye()
 det = Detector()
 faces = []
-for image in os.listdir('faceImages/'+str(I)):
-	#capture image
-	frame = cam1.see('faceImages/'+str(I)+'/'+image)
-	cv2.imshow('cam1',frame)
-	cv2.waitKey(50)
-
-	#detect face
-	newFaces = det.detect(frame)
-	if newFaces:
-		for face in newFaces:
-			faces.append(face)
-
-#extract features
+labels = []
 features = []
-for face in faces:
-	cv2.imshow('face',face)
-	cv2.waitKey(50)
-	features.append(ext.extractor(PP.toGray(face),5))
+for person in os.listdir('dataTraining'):
+	for sample in os.listdir('dataTraining/'+person):	
+		#capture image
+		frame = cam1.see('dataTraining/'+person+'/'+sample)
+		print('Reading: '+sample+' from '+person)
+		#cv2.imshow('cam1',frame)
+		#cv2.waitKey(50)
 
-#display features
-for p in features:
-	y = numpy.ones((p.shape[0],1))*I
-	f1 = open('features.csv','ab')
-	f2 = open('classes.csv','ab')
-	numpy.savetxt(f1,p,delimiter=',')
-	numpy.savetxt(f2,y,delimiter=',')
-	f1.close()
-	f2.close()
+		#detect face
+		newFaces = det.detect(frame)
+		if newFaces:
+			print('Detected: '+str(len(newFaces)))
+			for face in newFaces:
+				faces.append(face)
+				labels.append(int(person))
+				#extract features
+				#cv2.imshow(person,face)
+				features.append(ext.extractor(PP.toGray(face),5))
+cam1.closeEye()				
+print(len(faces),len(features),len(labels))
+#save features
+numpy.savetxt('classes.csv',labels,delimiter=',')
+numpy.savetxt('features.csv',features,delimiter=',')
+
 print('done')
 cv2.destroyAllWindows()

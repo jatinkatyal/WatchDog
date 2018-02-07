@@ -51,7 +51,7 @@ def calNeighbour(img,i,j,k):
 		else:
 			return 1
 
-def extractorLBP(image):
+def extractor(image):
 	image = cv2.cvtColor(image,cv2.COLOR_RGB2GRAY)
 	lbpImg = numpy.zeros(image.shape)
 	for i in range(image.shape[0]):
@@ -60,7 +60,7 @@ def extractorLBP(image):
 			for k in range(8):
 				byte = byte + calNeighbour(image,i,j,k)*2**k
 			lbpImg[i,j]=byte
-	return lbpImg
+	return lbpImg.flatten()
 
 if __name__=='__main__':
 	img = cv2.imread('test.jpg')
