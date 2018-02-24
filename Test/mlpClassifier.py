@@ -1,16 +1,23 @@
 from sklearn.neural_network import MLPClassifier
-import numpy,time
-X = numpy.genfromtxt('/home/jatin/Work/WatchDog/features.csv',delimiter=',')
-y = numpy.genfromtxt('/home/jatin/Work/WatchDog/classes.csv',delimiter=',')
+from sklearn.model_selection import KFold
+from sklearn.utils import resample
+import numpy
+#prep data
+data = numpy.genfromtxt('/home/jatin/Work/WatchDog/Test/data.csv',delimiter=',')
+X = data[:,:-2]
+y = data[:,-1]
+X,y = resample(X,y,random_state=0)
 
-clf = MLPClassifier(max_iter=1000)
-clf = clf.fit(X,y)
-testX = numpy.genfromtxt('/home/jatin/Work/WatchDog/featuresToTest.csv',delimiter=',')
-testy = numpy.genfromtxt('/home/jatin/Work/WatchDog/classesToTest.csv',delimiter=',')
-
-corrects = []
-for i in range(len(testX)):
-	pred = clf.predict([testX[i]])
-	if pred == testy[i]:
-		corrects.append(i)
-print(corrects,len(corrects))
+#classify
+clf = MLPClassifier()
+kf = KFold(n_splits=7,shuffle=True)
+scores=[]
+for train,test in kf.split(X):
+	trainX = X[train]
+	trainY = y[train]
+	testX = X[test]
+	testY = y[test]
+	clf.fit(trainX,trainY)
+	scores.append(clf.score(testX,testY))
+scores = numpy.array(scores)
+print(scores.mean())
