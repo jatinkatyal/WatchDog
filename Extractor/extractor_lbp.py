@@ -52,7 +52,6 @@ def calNeighbour(img,i,j,k):
 			return 1
 
 def extractor(image):
-	image = cv2.cvtColor(image,cv2.COLOR_RGB2GRAY)
 	lbpImg = numpy.zeros(image.shape)
 	for i in range(image.shape[0]):
 		for j in range(image.shape[1]):
@@ -64,6 +63,7 @@ def extractor(image):
 
 if __name__=='__main__':
 	img = cv2.imread('test.jpg')
+	img = cv2.cvtColor(img,cv2.COLOR_RGB2GRAY)
 	feature = extractorLBP(img)
 	cv2.imshow('lbp',feature)
 	cv2.waitKey(10000)

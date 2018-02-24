@@ -17,7 +17,7 @@ def extractor(image,winSize):
 	z = numpy.transpose(z)
 	p = [[dst[y,x],x,y] for x,y in z if x>1 and x<148 and y>1 and y<148]
 	p.sort()
-	z = [[x,y] for d,x,y in p[:50]]
+	z = [[x,y] for d,x,y in p[:10]]
 
 	#Finding features at HIPs
 	feature = []
@@ -28,16 +28,14 @@ def extractor(image,winSize):
 		matB=patch[:w+1,w:].copy()
 		matC=patch[w:,:w+1].copy()
 		matD=patch[w:,w:].copy()
-		vector=[]
 		for j in [matA,matB,matC,matD]:
-			vector.append(numpy.mean(j))
-		feature.append(vector)
+			feature.append(numpy.mean(j))
 	return numpy.array(feature)
 
 if __name__ == '__main__':
 	img = cv2.imread('test.jpg')
 	img = cv2.cvtColor(img,cv2.COLOR_RGB2GRAY)
-	print(len(extractor(img,5)))
+	print(extractor(img,5))
 	import time
 	time.sleep(3)
 	cv2.destroyAllWindows()

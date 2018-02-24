@@ -6,18 +6,25 @@ def extractor(image,winSize):
 
 	This returns a feature matrix with a vector of size 4 for each point i.e. matrix
 	"""
-	
+	return None
 	# Finding Harris's Intrest Points,	
-	dst = cv2.cornerHarris(image,2,3,0.04)
-	img=image.copy()
-	img[dst>0.01*dst.max()]=0
-	y,x = numpy.where(img==0)
-	z=[x,y]
-	z = numpy.array(z)
-	z = numpy.transpose(z)
-	p = [[dst[y,x],x,y] for x,y in z if x>1 and x<148 and y>1 and y<148]
-	p.sort()
-	z = [[x,y] for d,x,y in p[:10]]
+	w = int(winSize/2)
+    pad = [w,image.shape[0]-w-1,w,image.shape[1]-w-1]
+
+    img=image[pad[0]:pad[1],pad[2]:pad[3]]
+    dst = cv2.cornerHarris(img,2,3,0.04)
+    img[dst>0.01*dst.max()]=0
+    y,x = numpy.where(img==0)
+    z=[x,y]
+
+    z = numpy.array(z)
+    z = numpy.transpose(z)
+    p = [[dst[y,x],x,y] for x,y in z]
+    p.sort()
+    z = [[x,y] for d,x,y in p if x>int(winSize/2) and x<image.shape[1]-int(winSize/2) and y>int(winSize/2) and y<image.shape[0]-int(winSize/2)]
+    #if len(z)<10:
+    #   return None
+    z=z[:10]
 
 	#Finding features at HIPs
 	vector=[]

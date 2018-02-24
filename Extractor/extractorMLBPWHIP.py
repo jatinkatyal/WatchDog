@@ -17,7 +17,7 @@ def extractor(image,winSize):
 	z = numpy.transpose(z)
 	p = [[dst[y,x],x,y] for x,y in z if x>1 and x<148 and y>1 and y<148]
 	p.sort()
-	z = [[x,y] for d,x,y in p[:50]]
+	z = [[x,y] for d,x,y in p[:10]]
 
 	#Finding features at HIPs
 	feature = []
@@ -28,16 +28,14 @@ def extractor(image,winSize):
 		matB=patch[:w+1,w:].copy()
 		matC=patch[w:,:w+1].copy()
 		matD=patch[w:,w:].copy()
-		vector=[]
 		for j in [matA,matB,matC,matD]:
-			vector.append(numpy.mean(j)/255)
+			feature.append(numpy.mean(j)/255)
 			p = int(j.shape[0]/2)
 			q = int(j.shape[1]/2)
 			byte = 0
 			for k in range(8):
 				byte = byte + calNeighbour(j,p,q,k)*2**k
-			vector.append(byte/255)
-		feature.append(vector)
+			feature.append(byte/255)
 	return numpy.array(feature)
 
 def calNeighbour(img,i,j,k):

@@ -39,7 +39,6 @@ def extractor(image,winSize):
         c = abs(matA-matC)
         d = abs(matB-matD)
         for j in [a,b,c,d]:
-
             feature.append(numpy.mean(j))
             feature.append(numpy.std(j))
     return numpy.array(feature)
