@@ -15,7 +15,9 @@ from DnPP.detector import Detector
 #import Extractor.extractorHIPMSDWD as ext
 #import Extractor.extractorMeanWindowsAtHIP as ext
 #import Extractor.extractorMLBPWHIP as ext
-import Extractor.extractorLBPWHIP as ext
+#import Extractor.extractorLBPWHIP as ext
+#import Extractor.extractorGCLMHIP as ext
+import Extractor.extractorGLCM as ext
 from DnPP import preprocesses as PP
 
 cam1 = Eye()
@@ -28,8 +30,6 @@ for person in os.listdir('dataTraining'):
 		#capture image
 		frame = cam1.see('dataTraining/'+person+'/'+sample)
 		print('Reading: '+sample+' from '+person)
-		#cv2.imshow('cam1',frame)
-		#cv2.waitKey(50)
 
 		#detect face
 		newFaces = det.detect(frame)
@@ -40,12 +40,15 @@ for person in os.listdir('dataTraining'):
 				labels.append(int(person))
 				#extract features
 				#cv2.imshow(person,face)
-				features.append(ext.extractor(PP.toGray(face),5))
+				feature = ext.extractor(PP.toGray(face))
+				feature = numpy.hstack([feature,int(person)])
+				features.append(feature)
 cam1.closeEye()				
 print(len(faces),len(features),len(labels))
+
 #save features
-numpy.savetxt('classes.csv',labels,delimiter=',')
-numpy.savetxt('features.csv',features,delimiter=',')
+features = numpy.array(features)
+numpy.savetxt('Extracted data/features.csv',features,fmt='%10.5f',delimiter=',')
 
 print('done')
 cv2.destroyAllWindows()
