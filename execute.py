@@ -11,6 +11,7 @@ I = 4 #This is the class of training examples in faceImages directory.
 import cv2,time,numpy,os
 from Eye.eye import Eye
 from DnPP.detector import Detector
+from DnPP import preprocesses as PP
 #import Extractor.extractor_lbp as ext
 #import Extractor.extractorHIPMSDWD as ext
 #import Extractor.extractorMeanWindowsAtHIP as ext
@@ -18,17 +19,19 @@ from DnPP.detector import Detector
 #import Extractor.extractorLBPWHIP as ext
 #import Extractor.extractorGCLMHIP as ext
 import Extractor.extractorGLCM as ext
-from DnPP import preprocesses as PP
+#from Classifier.svm import classify
+from Classifier.decisionTree import classify
 
+#Load data
 cam1 = Eye()
 det = Detector()
 faces = []
 labels = []
 features = []
-for person in os.listdir('dataTraining'):
-	for sample in os.listdir('dataTraining/'+person):	
+for person in os.listdir('Training data'):
+	for sample in os.listdir('Training data/'+person):	
 		#capture image
-		frame = cam1.see('dataTraining/'+person+'/'+sample)
+		frame = cam1.see('Training data/'+person+'/'+sample)
 		print('Reading: '+sample+' from '+person)
 
 		#detect face
@@ -43,12 +46,14 @@ for person in os.listdir('dataTraining'):
 				feature = ext.extractor(PP.toGray(face))
 				feature = numpy.hstack([feature,int(person)])
 				features.append(feature)
-cam1.closeEye()				
-print(len(faces),len(features),len(labels))
+cam1.closeEye()
 
 #save features
 features = numpy.array(features)
-numpy.savetxt('Extracted data/features.csv',features,fmt='%10.5f',delimiter=',')
+numpy.savetxt('Extracted data/data.csv',features,fmt='%10.5f',delimiter=',')
+print('Features saved to data.csv')
 
-print('done')
-cv2.destroyAllWindows()
+#classify
+print('Using cross validation')
+print('Score: ',classify(features))
+#cv2.destroyAllWindows()
