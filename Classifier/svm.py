@@ -3,10 +3,9 @@ from sklearn.model_selection import KFold
 from sklearn.utils import resample
 import numpy
 
-#prep data
-def classify(data):
-	X = data[:,:-2]
-	y = data[:,-1]
+def classify(data,labels):
+	X = data
+	y = labels
 	X,y = resample(X,y,random_state=0)
 
 	#classify
@@ -16,6 +15,7 @@ def classify(data):
 	scores=[]
 	count=0
 	for train,test in kf.split(X):
+		count+=1
 		trainX = X[train]
 		trainY = y[train]
 		testX = X[test]
@@ -25,4 +25,4 @@ def classify(data):
 		print('fold ',count,' : ',score)
 		scores.append(score)
 	scores = numpy.array(scores)
-	return scores.mean()
+	return scores.mean(),clf
