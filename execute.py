@@ -16,9 +16,9 @@ from DnPP import preprocesses as PP
 #import Extractor.extractorHIPMSDWD as ext
 #import Extractor.extractorMeanWindowsAtHIP as ext
 #import Extractor.extractorMLBPWHIP as ext
-#import Extractor.extractorLBPWHIP as ext
-#import Extractor.extractorGCLMHIP as ext
-import Extractor.extractorGLCM as ext
+#import Extractor.extractorLBPHIP as ext
+import Extractor.extractorGLCMHIP as ext
+#import Extractor.extractorGLCM as ext
 #from Classifier.svm import classify
 from Classifier.decisionTree import classify
 
@@ -40,20 +40,23 @@ for person in os.listdir('Training data'):
 			print('Detected: '+str(len(newFaces)))
 			for face in newFaces:
 				faces.append(face)
-				labels.append(int(person))
 				#extract features
-				#cv2.imshow(person,face)
-				feature = ext.extractor(PP.toGray(face))
-				feature = numpy.hstack([feature,int(person)])
-				features.append(feature)
+				cv2.imshow(person,face)
+				ret,feature = ext.extractor(face,25)
+				#feature = numpy.hstack([feature,int(person)])
+				if ret:
+					features.append(feature)
+					labels.append(int(person))
 cam1.closeEye()
 
 #save features
 features = numpy.array(features)
+labels = numpy.array(labels)
+print(features.shape)
 numpy.savetxt('Extracted data/data.csv',features,fmt='%10.5f',delimiter=',')
 print('Features saved to data.csv')
 
 #classify
 print('Using cross validation')
-print('Score: ',classify(features))
+print('Score: ',classify(features,labels)[0])
 #cv2.destroyAllWindows()
